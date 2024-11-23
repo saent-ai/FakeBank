@@ -1,0 +1,406 @@
+import time
+import random
+
+list_for_card_number = []
+list_for_CVV_number = []
+list1 = []
+list2 = []
+
+for card_number_range in range(0,11):
+    card_number_random = random.randint(0,9)
+    list_for_card_number.append(card_number_random)
+    for a in list_for_card_number:
+        a = str(a)
+        list1.append(a)
+    NUMBER_CARD = " ".join(list1)
+
+for CVV_number_range in range(0,3):
+    CVV_number_random = random.randint(0,9)
+    list_for_CVV_number.append(CVV_number_random)
+    for b in list_for_CVV_number:
+        b = str(b)
+        list2.append(b)
+    NUMBER_CVV = " ".join(list2)
+
+#function for loading output
+def Loading():
+    print()
+    print("Loading")
+    for a in range(0,5):
+        print(".",end=" ")
+        time.sleep(0.10)
+    print()
+    print()
+
+class ACCOUNT:
+    def __init__(self, first_name, last_name, balance, password):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.balance = balance
+        self.password = password
+
+    def main_menu(self):
+        main_menu_choice = 0 #global changes the variable in the whole code.
+        print()
+        print("-------------------------")
+        print(f"Hello {self.first_name}. Welcome to FakeBank!")
+        try:
+            main_menu_choice = int(input("What would you like to do?\n\n1.Check balance?\n2.Card info?\n3.Change password?\n4.Logout?\n"))
+        except ValueError as a:
+            print()
+            print(f"An error has accured: {a}")
+        try:
+            while main_menu_choice < 1 or main_menu_choice > 4:
+                print("Please try again.")
+                print()
+                main_menu_choice = int(input("What would you like to do?\n\n1.Check balance?\n2.Card info?\n3.Change password?\n4.Logout?\n"))
+        except ValueError as a:
+            print(f"An error has accured: {a}")
+            print("Please input a number within the range")
+            Loading()
+            return person.main_menu() 
+        if main_menu_choice == 1:
+            Loading()
+            person.balance_check()#Goes to the check balance function then straight into Deep_look
+        elif main_menu_choice == 2:
+            Loading()
+            person.see_card_info()
+        elif main_menu_choice == 3:
+            Loading()
+            person.password_overview()
+            pass # need to create this class.
+        else:
+            pass
+    def balance_check(self):#small test to make sure balance is in the right place
+        print(f"Your balance is: £{self.balance}")
+
+class DEEP_LOOK_INTO_BALANCE(ACCOUNT):#creates another class for balace and inherits the Account atributes and methods
+    def __init__(self, first_name, last_name, balance, password, new_balance):
+        super().__init__(first_name, last_name, balance, password)
+        self.new_balance = new_balance
+#- main attributes of the deep look
+    def balance_check(self):# polymorphism of balance check in ACCOUNT
+        balance_check_choice = 0
+        print(f"Welcome to your Balance! you currently have: £{self.balance}")
+        print()
+        try:
+            balance_check_choice = int(input("Would you like to:\n1.Take money out?\n2.Put money in?\n3.Return to main menu?\n"))
+        except ValueError as a:#if the user enters a non int an error is raised but doesnt stop the program
+            print()
+            print(f"An error has accured: {a}")
+        try:
+            while balance_check_choice < 1 or balance_check_choice > 3:#if a int is input but not in the range
+                print("Please try again.")
+                print()
+                balance_check_choice = int(input("Would you like to:\n1.Take money out?\n2.Put money in?\n3.Return to main menu?\n"))
+        except ValueError as a:
+            print(f"An error has accured: {a}")
+            print("Returning you to main menu")
+            Loading()
+            return person.main_menu()#have 2 chances until the user gets pushed back to the main menu
+        if balance_check_choice == 1:
+            person.take_out()
+        elif balance_check_choice == 2:
+            person.put_in()
+        else:
+            Loading()
+            person.main_menu()
+#------------------------------------
+    def take_out(self):
+        take_out_choice = 0
+        take_out_choice2 = 0
+        amount = 0
+        print()
+        try:
+            take_out_choice = int(input("Are you sure you want make a payment?\n1.Yes\n2.No\n"))
+        except ValueError as a:
+            print()
+            print(f"An error has accured: {a}")
+        try:
+            while take_out_choice < 1 or take_out_choice > 2:
+                print("Please try again.\n")
+                take_out_choice = int(input("Are you sure you want make a payment?\n1.Yes\n2.No\n"))
+        except ValueError as a:
+            print(f"An error has accured: {a}")
+            print("Returning you to main menu")
+            Loading()
+            return s.main_menu()
+        if (take_out_choice == 1):
+            try:
+                amount = int(input("Please enter the amount:\n£"))
+                while amount < 0 or amount > 1000000:
+                    print("Please try again.\n")
+                    amount = int(input("Please enter the amount:\n£"))
+            except ValueError as a:
+                print(f"An error has accured: {a}")
+                print("Returning you to main menu")
+                Loading()
+                person.main_menu()
+            self.new_balance = self.balance - amount
+            if self.new_balance < 0:
+                print("cannot go overdraft, input a diffrent amount")
+            else:
+                print(f"Your balance: £{self.new_balance}\n")
+                self.balance = self.new_balance
+            try:    
+                take_out_choice2 = int(input("Would you like to return to main menu or continue in the balance tab?\n1.Main Menu\n2.Balance tab\n"))
+            except ValueError as a:
+                print()
+                print(f"An error has accured: {a}")
+            try:
+                while take_out_choice2 < 1 or take_out_choice > 2:
+                    print("Please try again.\n")
+                    take_out_choice2 = int(input("Would you like to return to main menu or continue in the balance tab?\n1.Main Menu\n2.Balance tab\n"))    
+            except ValueError as a:
+                print(f"An error has accured: {a}")
+                print("Returning you to main menu")
+                Loading()
+                person.main_menu()
+            if take_out_choice2 == 1:
+                Loading()
+                person.main_menu()
+            elif take_out_choice2 == 2:
+                print("Returning to Main Balance Tab")
+                Loading()
+                person.balance_check()
+        elif take_out_choice == 2:
+            print("Returning you to main menu")
+            Loading()
+            person.main_menu()
+#--------------------------------------
+    def put_in(self):
+        put_in_choice = 0
+        put_in_choice2 = 0
+        amount2 = 0
+        print()
+        try:
+            put_in_choice = int(input("Are you sure you want to add money?\n1.Yes\n2.No\n"))
+        except ValueError as a:
+            print()
+            print(f"An error has accured: {a}")
+        try:
+            while put_in_choice < 1 or put_in_choice > 2:
+                print("Please try again.\n")
+                put_in_choice = int(input("Are you sure you want make a payment?\n1.Yes\n2.No\n"))
+        except ValueError as a:
+            print(f"An error has accured: {a}")
+            print("Returning you to main menu")
+            Loading()
+            return s.main_menu()
+        if (put_in_choice == 1):
+            try:
+                amount2 = int(input("Please enter the amount:\n£"))
+                while amount2 < 0 or amount2 > 1000000:
+                    print("Please try again.\n")
+                    amount = int(input("Please enter the amount:\n£"))
+            except ValueError as a:
+                print(f"An error has accured: {a}")
+                print("Returning you to main menu")
+                Loading()
+                person.main_menu()
+            self.new_balance = self.balance + amount2
+            if self.new_balance > 1000000:
+                print("Cannot go over 1,000,000")
+            else:
+                print(f"Your balance: £{self.new_balance}\n")
+                self.balance = self.new_balance
+            try:    
+                put_in_choice2 = int(input("Would you like to return to main menu or continue in the balance tab?\n1.Main Menu\n2.Balance tab\n"))
+            except ValueError as a:
+                print()
+                print(f"An error has accured: {a}")
+            try:
+                while put_in_choice2 < 1 or put_in_choice > 2:
+                    print("Please try again.\n")
+                    put_in_choice2 = int(input("Would you like to return to main menu or continue in the balance tab?\n1.Main Menu\n2.Balance tab\n"))    
+            except ValueError as a:
+                print(f"An error has accured: {a}")
+                print("Returning you to main menu")
+                Loading()
+                person.main_menu()
+            if put_in_choice2 == 1:
+                Loading()
+                person.main_menu()
+            elif put_in_choice2 == 2:
+                print("Returning to Main Balance Tab")
+                Loading()
+                person.balance_check()
+        elif put_in_choice == 2:
+            print("Returning you to main menu")
+            Loading()
+            person.main_menu()
+
+class SEE_CARD_INFO(DEEP_LOOK_INTO_BALANCE):
+    def __init__(self, first_name, last_name, balance, password, new_balance, card_number, CVV, expire_date):
+        super().__init__(first_name, last_name, balance, password, new_balance)
+        self.card_number = card_number
+        self.CVV = CVV
+        self.expire_date = expire_date
+
+    def see_card_info(self):
+        see_card_choice = 0
+        print(f"Welcome to your card information! Heres your FakeCard:\n")
+        print("***************************")
+        print("*                         *")
+        print("*  /////////////////////  *")
+        print("*                         *")
+        print(f"*  {self.card_number}  *")
+        print("*                         *")
+        print(f"*           CVV:  {self.CVV}   *")
+        print("*                         *")
+        print(f"*  exp: {self.expire_date}          *")
+        print("*                         *")
+        print("***************************\n")
+        try:
+            see_card_choice = int(input("Are you ready to return to main menu?\n1.Yes\n"))
+        except ValueError as a:
+            print()
+            print(f"An error has accured: {a}")
+
+        try:
+            while see_card_choice != 1:
+                print("Please try again.\n")
+                see_card_choice = int(input("Are you ready to return to main menu?\n1.Yes\n"))
+        except ValueError as a:
+            print(f"An error has accured: {a}")
+            print("Returning you to main menu")
+            Loading()
+            person.main_menu()
+            
+        if see_card_choice == 1 :
+            Loading()
+            person.main_menu()
+        else:
+            print("errror")
+        
+class CHANGE_PASSWORD(SEE_CARD_INFO):
+    def __init__(self, first_name, last_name, balance, password, new_balance, card_number, CVV, expire_date, new_password):
+        super().__init__(first_name, last_name, balance, password, new_balance, card_number, CVV, expire_date)
+        self.new_password = new_password
+
+    def password_overview(self):
+        password_choice = 0
+        try:
+            password_choice = int(input("Welcome to your password info! would you like to:\n1.See password?\n2.Change password?\n3.Return to main menu?\n"))
+        except ValueError as a:
+            print()
+            print(f"An error has accured: {a}")
+        try:
+            while password_choice < 1 or password_choice > 2:
+                print("Please try again.\n")
+                password_choice = int(input("Welcome to your password info! would you like to:\n1.See password?\n2.Change password?\n3.Return to main menu?\n"))
+                
+        except ValueError as a:
+            print(f"An error has accured: {a}")
+            print("Returning you to main menu")
+            Loading()
+            person.main_menu()
+            
+        if password_choice == 1:
+            person.see_password()
+        elif password_choice == 2:
+            person.set_password()
+        else:
+            person.main_menu()
+
+    def see_password(self):
+        password_choice2 = 0
+        print(f"\nYour current password is {self.password}")
+        try:
+            password_choice2 = int(input("Would you like to:\n\n1.Return to password overview?\n2.Return to main menu?\n"))
+        except ValueError as a:
+            print()
+            print(f"An error has accured: {a}")
+
+        try:
+            while password_choice2 < 1 or password_choice2 > 2:
+                print("Please try again.\n")
+                password_choice2 = int(input("Would you like to:\n\n1.Return to password overview?\n2.Return to main menu?\n"))
+
+        except ValueError as a:
+            print(f"An error has accured: {a}")
+            print("Returning you to main menu")
+            Loading()
+            person.main_menu()
+            
+        if password_choice2 == 1:
+            person.password_overview()
+        elif password_choice2 == 2:
+            Loading()
+            person.main_menu()
+            
+
+    def set_password(self):
+        change_the_password_choice = 0
+        try:
+            change_the_password_choice = int(input("\nAre you sure you want to change your password?\n1.Yes\n2.No\n"))
+        except ValueError as a:
+            print()
+            print(f"An error has accured: {a}")
+
+        try:
+            while change_the_password_choice < 1 or change_the_password_choice > 2:
+                print("Please try again.\n")
+                change_the_password_choice = int(input("\nAre you sure you want to change your password?\n1.Yes\n2.No\n"))
+                
+        except ValueError as a:
+            print(f"An error has accured: {a}")
+            print("Returning you to main menu")
+            Loading()
+            person.main_menu()
+
+            
+        if change_the_password_choice == 1:
+            change_the_password = input("Enter the new password:\n")
+            self.password = change_the_password
+            print()
+            Loading()
+            print("Your change was successesful")
+            print("Returning to main menu")
+            Loading()
+            person.main_menu()
+        elif change_the_password_choice == 2:
+            print()
+            print("Returning to main menu")
+            Loading()
+            person.main_menu()
+#-------------------------------------------------------------------------------------
+
+welcome_to_FakeBank_begining = int(input("Welcome to FakeBank! Are you a registered user?\n1.Yes\n2.No\n"))
+
+if welcome_to_FakeBank_begining == 1:
+    is_first_name_in_list = input("Enter first name")
+    is_last_name_in_list = input("Enter last name")
+    is_password_in_list = input("Enter password")
+    for d in client:
+        if is_first_name_in_list == client[d].first_name:
+            print("You already have an account")
+        else:
+            print("We can't find you on the system. You need to create an account")
+
+elif welcome_to_FakeBank_begining == 2:
+    making_an_account_first_name = input("Enter your first name\n")
+    making_an_account_last_name = input("Enter your last name\n")
+    making_an_account_balance = int(input("Enter balance between 0 and £1,000,000\n£"))
+    while making_an_account_balance < 0 or making_an_account_balance > 1000000:
+        making_an_account_balance = int(input("Enter balance between 0 and £1,000,000\n£"))
+        making_an_account_password = input("Enter a password\n")
+              
+client.append(person)
+
+print("\nWelcome to FakeBank, Loggin:\n")
+        ask_first_name = input("Enter first name\n")
+        ask_last_name = input("Enter last name\n")
+        ask_password = input("Enter password\n")
+
+        if ask_first_name == client[0].first_name and ask_last_name == client[0].last_name and ask_password == client[0].password:
+            Loading()
+            person.main_menu()
+        else:
+            print("Incorrect password or name please try again")
+
+person = CUSTUMER(making_an_account_first_name, making_an_account_last_name,
+                      making_an_account_balance, making_an_account_password,
+                      0, NUMBER_CARD, NUMBER_CVV, "24/02/25", "")
+client.append(person)
+person.are_you_registered()
